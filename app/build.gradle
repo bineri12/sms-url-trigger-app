@@ -1,0 +1,32 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion 33
+    defaultConfig {
+        applicationId "com.example.smsurltrigger"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug {
+            // no signing config - debug build will be unsigned (debuggable)
+        }
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+}
