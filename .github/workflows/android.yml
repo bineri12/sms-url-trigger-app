@@ -1,47 +1,33 @@
 name: Android CI - build APK
+
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   build:
-    name: Build debug APK
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          distribution: temurin
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
-        with:
-          api-level: 33
-          build-tools: "33.0.2"
-          components: "platform-tools;platforms;build-tools;extra-google-m2repository;extra-android-m2repository"
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-${{ runner.os }}-
-
-      - name: Install Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: '7.4.2'
-
-      - name: Build Debug APK
-        run: ./gradlew -p ./app assembleDebug --no-daemon
+      - name: Build with Gradle
+        run: ./gradlew build
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: SmsUrlTrigger-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
